@@ -8,6 +8,8 @@ public class Principal {
 
         ExtractorExcel ex = new ExtractorExcel();
 
-        ex.connect();
+        ex.connection();
+
+        ex.disconnection();
     }
 }
