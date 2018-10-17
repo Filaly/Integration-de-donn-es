@@ -1,4 +1,4 @@
-package extractors;
+package main.java.extractors;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
