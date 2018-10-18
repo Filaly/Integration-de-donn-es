@@ -1,3 +1,4 @@
+/*
 package main.java.extractors;
 
 import java.io.FileInputStream;
@@ -16,8 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExtractorExcel {
 
-    public ExtractorExcel()
-    {
+    public ExtractorExcel() {
         super();
     }
 
@@ -42,9 +42,7 @@ public class ExtractorExcel {
     }
 
 
-
-    public void connexion() throws SQLException, ClassNotFoundException
-    {
+    public void connexion() throws SQLException, ClassNotFoundException {
         String fileName = "modele/Source1.xls";
 
 
@@ -55,9 +53,9 @@ public class ExtractorExcel {
 
 
             Workbook workbook = null;
-            if(fileName.toLowerCase().endsWith("xlsx")){
+            if (fileName.toLowerCase().endsWith("xlsx")) {
                 workbook = new XSSFWorkbook(fis);
-            }else if(fileName.toLowerCase().endsWith("xls")){
+            } else if (fileName.toLowerCase().endsWith("xls")) {
                 workbook = new HSSFWorkbook(fis);
             }
 
@@ -90,4 +88,4 @@ public class ExtractorExcel {
     }
 
 
-}
+}*/
