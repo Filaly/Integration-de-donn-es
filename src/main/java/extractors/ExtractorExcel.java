@@ -1,17 +1,69 @@
 package extractors;
 
+import requests.Req2;
+
 import java.net.URL;
 import java.sql.*;
+import java.util.Hashtable;
+import java.util.Map;
 
 
 
 public class ExtractorExcel {
 
     private Connection conn;
+    private static Hashtable<String, String> table; //<GAV,LAV>
+    private String id_etudiant;
 
-    public ExtractorExcel()
+    Req2 req2;
+
+    public ExtractorExcel(Req2 req2)
     {
-        super();
+        this.req2=req2;
+    }
+
+    public void getRequest2FromMediator(Req2 req2){
+        this.req2 = req2;
+    }
+
+    public void TradForReq2(){
+        table.put(req2.getProvenance(),"Provenance");
+        table.put(req2.getEtudiant(),"Statut");
+    }
+
+    public int exec_request2() throws SQLException {
+
+        TradForReq2();
+        connection();
+        //System.out.println(table.get(req2.getProvenance()));
+        String sql = "SELECT * FROM \"2006\" WHERE"+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
+                "AND Statut = \'"+table.get(req2.getEtudiant())+"\' " +
+                "UNION SELECT * FROM \"2007\"  WHERE Provenance = \'France\' AND Statut = \'etudiant\' ";
+
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        ResultSetMetaData resultSetMetaData = rs.getMetaData();
+        int iNumCols = resultSetMetaData.getColumnCount();
+        int sumEtudiant = 0;
+        Object colval;
+        while (rs.next()) {
+            sumEtudiant += 1;
+            for (int i = 1; i <= iNumCols; i++) {
+                colval = rs.getObject(i);
+
+                System.out.print(colval + "  ");
+
+            }
+            System.out.println();
+        }
+        System.out.println(sumEtudiant);
+        rs.close();
+        stmt.close();
+
+        return sumEtudiant;
+
     }
 
     public void connection() {
@@ -35,6 +87,7 @@ public class ExtractorExcel {
 
     public void disconnection()
     {
+
         try
         {
             this.conn.close();
@@ -44,6 +97,14 @@ public class ExtractorExcel {
         {
             System.err.println("Erreur de déconnexion à la base de données.");
         }
+    }
+
+
+
+
+
+    public void sendResultToMediator(){
+
     }
 
 }
