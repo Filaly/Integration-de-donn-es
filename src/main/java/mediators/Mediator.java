@@ -5,24 +5,26 @@ import requests.Req1;
 import requests.Req2;
 import requests.Req3;
 
+import java.sql.SQLException;
+
 public class Mediator implements IMediateur {
 
-    private Req1 req1;
-    private Req2 req2;
-    private Req3 req3;
+    private int res2Excel;
+    private int res2XML;
+    private int res2Relat;
+
     private ExtractorExcel extractorExcel;
 
-    public Mediator(Req1 req1, Req2 req2, Req3 req3) {
-        this.req1 = req1;
-        this.req2 = req2;
-        this.req3 = req3;
+    public Mediator() {
+        this.extractorExcel = new ExtractorExcel();
     }
 
+    // Méthodes pour envoyer les requetes à l'extractor
     public void sendReq1() {
 
     }
 
-    public void sendReq2() {
+    public void sendReq2(Req2 req2) {
         extractorExcel.getRequest2FromMediator(req2);
     }
 
@@ -30,23 +32,27 @@ public class Mediator implements IMediateur {
 
     }
 
-    public Req1 getRes1() {
-        return null;
+    // Méthodes pour récupérer les résultats depuis l'extracteurr
+
+    public void getRes1() {
     }
 
-    public Req2 getRes2() {
-        return null;
+    public void getRes2() throws SQLException {
+        this.res2Excel = extractorExcel.sendResult2ToMediator();
+        //this.res2XML = extractorXML.send...
     }
 
-    public Req3 getRes3() {
-        return null;
+    public void getRes3() {
     }
 
-    public String agregaRes() {
-        return null;
+    //Méthodes pour agréger les résultats
+
+    public int agregaRes2() throws SQLException {
+        getRes2();
+        return res2Excel ; //+ res2XML + res2 Excel
     }
 
     public void show() {
-
     }
+
 }

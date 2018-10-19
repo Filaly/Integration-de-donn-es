@@ -13,13 +13,11 @@ public class ExtractorExcel {
 
     private Connection conn;
     private static Map<String, String> table; //<GAV,LAV>
-    private String id_etudiant;
 
     private Req2 req2;
 
-    public ExtractorExcel(Req2 req2)
+    public ExtractorExcel()
     {
-        this.req2=req2;
         table = new Hashtable<String, String>();
     }
 
@@ -27,15 +25,18 @@ public class ExtractorExcel {
         this.req2 = req2;
     }
 
-    private void TradForReq2(){
+    private void TradRequest(){
         table.put(req2.getProvenance(),"Provenance");
         table.put(req2.getEtudiant(),"etudiant");
-
     }
 
-    public int exec_request2() throws SQLException {
+    public int sendResult2ToMediator() throws SQLException {
+        return exec_request2();
+    }
 
-        TradForReq2();
+    private int exec_request2() throws SQLException {
+
+        TradRequest();
         connection();
 
         //System.out.println(table.get(req2.getProvenance()));
@@ -66,11 +67,13 @@ public class ExtractorExcel {
         rs.close();
         stmt.close();
 
+        disconnection();
+
         return sumEtudiant;
 
     }
 
-    public void connection() {
+    private void connection() {
         try {
             Class.forName("com.hxtt.sql.excel.ExcelDriver");
         } catch (ClassNotFoundException ex) {
@@ -89,7 +92,7 @@ public class ExtractorExcel {
         }
     }
 
-    public void disconnection()
+    private void disconnection()
     {
 
         try
@@ -101,14 +104,6 @@ public class ExtractorExcel {
         {
             System.err.println("Erreur de déconnexion à la base de données.");
         }
-    }
-
-
-
-
-
-    public void sendResultToMediator(){
-
     }
 
 }
