@@ -12,33 +12,37 @@ import java.util.Map;
 public class ExtractorExcel {
 
     private Connection conn;
-    private static Hashtable<String, String> table; //<GAV,LAV>
+    private static Map<String, String> table; //<GAV,LAV>
     private String id_etudiant;
 
-    Req2 req2;
+    private Req2 req2;
 
     public ExtractorExcel(Req2 req2)
     {
         this.req2=req2;
+        table = new Hashtable<String, String>();
     }
 
     public void getRequest2FromMediator(Req2 req2){
         this.req2 = req2;
     }
 
-    public void TradForReq2(){
+    private void TradForReq2(){
         table.put(req2.getProvenance(),"Provenance");
-        table.put(req2.getEtudiant(),"Statut");
+        table.put(req2.getEtudiant(),"etudiant");
+
     }
 
     public int exec_request2() throws SQLException {
 
         TradForReq2();
         connection();
+
         //System.out.println(table.get(req2.getProvenance()));
-        String sql = "SELECT * FROM \"2006\" WHERE"+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
-                "AND Statut = \'"+table.get(req2.getEtudiant())+"\' " +
-                "UNION SELECT * FROM \"2007\"  WHERE Provenance = \'France\' AND Statut = \'etudiant\' ";
+        String sql = "SELECT * FROM \"2006\" WHERE "+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
+                     "AND Statut = \'"+table.get(req2.getEtudiant())+"\' " +
+                     "UNION SELECT * FROM \"2007\" WHERE "+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
+                     "AND Statut = \'"+table.get(req2.getEtudiant())+"\' ";
 
 
         Statement stmt = conn.createStatement();

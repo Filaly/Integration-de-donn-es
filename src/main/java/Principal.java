@@ -13,8 +13,6 @@ public class Principal {
 
 
 
-
-
         Req1 req1 = new Req1("",2);
         Req2 req2 = new Req2("etudiant","Provenance", "France");
         Req3 req3 = new Req3(TypeCour.CM);
