@@ -1,4 +1,4 @@
-package main.java.extractors;
+package extractors;
 
 public class ExtractorPostgre {
 }

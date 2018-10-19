@@ -1,4 +1,4 @@
-package main.java.extractors;
+package extractors;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ public class ExtractorXml {
     }
 
     public void lire_XML(String path_fichier) throws FileNotFoundException, SAXException,
-                                                IOException, ParserConfigurationException {
+            IOException, ParserConfigurationException {
         Document document = null;
         DocumentBuilderFactory factory = null;
         DocumentBuilder builder = null;
@@ -39,7 +39,7 @@ public class ExtractorXml {
         NodeList enseignants = document.getElementsByTagName("Enseignant");
 
 
-         System.out.println("enseignants.getLength()" + enseignants.getLength());
+        System.out.println("enseignants.getLength()" + enseignants.getLength());
 
         NodeList enseig;
         NodeList Nb_heures;
