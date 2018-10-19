@@ -13,6 +13,10 @@ public class Mediator implements IMediateur {
     private int res2XML;
     private int res2Relat;
 
+    public ExtractorExcel getExtractorExcel() {
+        return extractorExcel;
+    }
+
     private ExtractorExcel extractorExcel;
 
     public Mediator() {

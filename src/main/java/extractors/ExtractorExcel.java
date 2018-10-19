@@ -37,7 +37,6 @@ public class ExtractorExcel {
     private int exec_request2() throws SQLException {
 
         TradRequest();
-        connection();
 
         //System.out.println(table.get(req2.getProvenance()));
         String sql = "SELECT * FROM \"2006\" WHERE "+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
@@ -63,17 +62,15 @@ public class ExtractorExcel {
             }
             System.out.println();
         }
-        System.out.println(sumEtudiant);
+  
         rs.close();
         stmt.close();
-
-        disconnection();
 
         return sumEtudiant;
 
     }
 
-    private void connection() {
+    public void connection() {
         try {
             Class.forName("com.hxtt.sql.excel.ExcelDriver");
         } catch (ClassNotFoundException ex) {
@@ -92,7 +89,7 @@ public class ExtractorExcel {
         }
     }
 
-    private void disconnection()
+    public void disconnection()
     {
 
         try

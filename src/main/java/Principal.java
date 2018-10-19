@@ -15,6 +15,7 @@ public class Principal {
         // instantiation du médiateur
         Mediator mediator = new Mediator();
 
+        mediator.getExtractorExcel().connection();
         //envoi des requete
         mediator.sendReq2(req2);
 
@@ -24,6 +25,8 @@ public class Principal {
 
         //affichage du résultat
         System.out.println("Réponse la requete 1 : nombre d'etudiant "+ numEtudiants);
+
+        mediator.getExtractorExcel().disconnection();
 
     }
 }
