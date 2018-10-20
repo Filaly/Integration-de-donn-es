@@ -1,21 +1,24 @@
 package mediators;
 
 import extractors.ExtractorExcel;
-import requests.Req1;
 import requests.Req2;
 import requests.Req3;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
 
-public class Mediator implements IMediateur {
+public class Mediator {
 
     private int res2Excel;
     private int res2XML;
     private int res2Relat;
 
-    public ExtractorExcel getExtractorExcel() {
-        return extractorExcel;
-    }
+    private ArrayList<Map<String, String>> res3Excel;
+    private Map<String,String> res3Xml;
+    private Map<String,String> res3Relat;
+
+
 
     private ExtractorExcel extractorExcel;
 
@@ -32,8 +35,8 @@ public class Mediator implements IMediateur {
         extractorExcel.getRequest2FromMediator(req2);
     }
 
-    public void sendReq3() {
-
+    public void sendReq3(Req3 req3) {
+        extractorExcel.getRequest3FromMediator(req3);
     }
 
     // Méthodes pour récupérer les résultats depuis l'extracteurr
@@ -41,12 +44,13 @@ public class Mediator implements IMediateur {
     public void getRes1() {
     }
 
-    public void getRes2() throws SQLException {
+    private void getRes2() throws SQLException {
         this.res2Excel = extractorExcel.sendResult2ToMediator();
         //this.res2XML = extractorXML.send...
     }
 
-    public void getRes3() {
+    private void getRes3() throws SQLException {
+        this.res3Excel = extractorExcel.sendResult3ToMediator();
     }
 
     //Méthodes pour agréger les résultats
@@ -56,7 +60,13 @@ public class Mediator implements IMediateur {
         return res2Excel ; //+ res2XML + res2 Excel
     }
 
-    public void show() {
+    public ArrayList<Map<String, String>> agregaRes3() throws SQLException {
+        getRes3();
+        return res3Excel ; //+ res2XML + res2 Excel
+    }
+    
+    public ExtractorExcel getExtractorExcel() {
+        return extractorExcel;
     }
 
 }
