@@ -12,33 +12,37 @@ import java.util.Map;
 public class ExtractorExcel {
 
     private Connection conn;
-    private static Hashtable<String, String> table; //<GAV,LAV>
-    private String id_etudiant;
+    private static Map<String, String> table; //<GAV,LAV>
 
-    Req2 req2;
+    private Req2 req2;
 
-    public ExtractorExcel(Req2 req2)
+    public ExtractorExcel()
     {
-        this.req2=req2;
+        table = new Hashtable<String, String>();
     }
 
     public void getRequest2FromMediator(Req2 req2){
         this.req2 = req2;
     }
 
-    public void TradForReq2(){
+    private void TradRequest(){
         table.put(req2.getProvenance(),"Provenance");
-        table.put(req2.getEtudiant(),"Statut");
+        table.put(req2.getEtudiant(),"etudiant");
     }
 
-    public int exec_request2() throws SQLException {
+    public int sendResult2ToMediator() throws SQLException {
+        return exec_request2();
+    }
 
-        TradForReq2();
-        connection();
+    private int exec_request2() throws SQLException {
+
+        TradRequest();
+
         //System.out.println(table.get(req2.getProvenance()));
-        String sql = "SELECT * FROM \"2006\" WHERE"+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
-                "AND Statut = \'"+table.get(req2.getEtudiant())+"\' " +
-                "UNION SELECT * FROM \"2007\"  WHERE Provenance = \'France\' AND Statut = \'etudiant\' ";
+        String sql = "SELECT * FROM \"2006\" WHERE "+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
+                     "AND Statut = \'"+table.get(req2.getEtudiant())+"\' " +
+                     "UNION SELECT * FROM \"2007\" WHERE "+table.get(req2.getProvenance())+" = \'"+req2.getPays()+"\' " +
+                     "AND Statut = \'"+table.get(req2.getEtudiant())+"\' ";
 
 
         Statement stmt = conn.createStatement();
@@ -58,7 +62,7 @@ public class ExtractorExcel {
             }
             System.out.println();
         }
-        System.out.println(sumEtudiant);
+  
         rs.close();
         stmt.close();
 
@@ -97,14 +101,6 @@ public class ExtractorExcel {
         {
             System.err.println("Erreur de déconnexion à la base de données.");
         }
-    }
-
-
-
-
-
-    public void sendResultToMediator(){
-
     }
 
 }

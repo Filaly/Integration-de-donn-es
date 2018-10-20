@@ -2,27 +2,27 @@ package requests;
 
 public class Req1 {
 
-    private String statut;
-    private int nbHeures;
+    private String enseignant;
+    private String nbHeures;
 
-    public Req1(String statut, int nbHeures) {
-        this.statut = statut;
+    public Req1(String enseignant, String nbHeures) {
+        this.enseignant = enseignant;
         this.nbHeures = nbHeures;
     }
 
-    public String getStatut() {
-        return statut;
+    public String getEnseignant() {
+        return enseignant;
     }
 
-    public void setStatut(String statut) {
-        this.statut = statut;
+    public void setEnseignant(String enseignant) {
+        this.enseignant = enseignant;
     }
 
-    public int getNbHeures() {
+    public String getNbHeures() {
         return nbHeures;
     }
 
-    public void setNbHeures(int nbHeures) {
+    public void setNbHeures(String nbHeures) {
         this.nbHeures = nbHeures;
     }
 }

@@ -1,30 +1,37 @@
-
-import extractors.ExtractorExcel;
 import mediators.Mediator;
 import requests.Req1;
 import requests.Req2;
 import requests.Req3;
 import requests.TypeCour;
-import extractors.ExtractorXml;
-import java.sql.SQLException;
+
+import java.util.HashMap;
+
 public class Principal {
     public static void main(String[] args) throws Exception {
 
-        System.out.println("hello from MAIN");
-        ExtractorXml example = new ExtractorXml();
-        example.lire_XML("C:\\Users\\Hania\\OneDrive\\Beu\\TD-mediateur\\Integration-de-donn-es\\modele\\Univ_BD_3.xml");
-
-
-        /*Req1 req1 = new Req1("",2);
+        //définition des requtes
+        Req1 req1 = new Req1("enseignant", "Heures");
         Req2 req2 = new Req2("etudiant","Provenance", "France");
         Req3 req3 = new Req3(TypeCour.CM);
-        Mediator m = new Mediator(req1,req2,req3);
 
-        ExtractorExcel ex = new ExtractorExcel(req2);
+        // instantiation du médiateur
+        Mediator mediator = new Mediator();
 
-        int nubreEtud=ex.exec_request2();
+        mediator.getExtractorExcel().connection();
+        //envoi des requete
+        mediator.sendReq1(req1);
+        mediator.sendReq2(req2);
 
-        System.out.println("nombre d'etudiant"+ nubreEtud)*/;
+
+        //recupération des résultats agrégés
+        HashMap<String, Integer> numHeures = mediator.agregaRes1();
+        int numEtudiants= mediator.agregaRes2();
+
+        //affichage du résultat
+        System.out.println("Réponse la requete 1 : nombre d'heures "+ numHeures);
+        System.out.println("Réponse la requete 2 : nombre d'etudiant "+ numEtudiants);
+
+        mediator.getExtractorExcel().disconnection();
 
     }
 }
