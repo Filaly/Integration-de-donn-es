@@ -13,19 +13,26 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class ExtractorXml {
 
-    private static Map<String, String> table1; //<GAV,LAV>
-    private static Map<String, String> table2; //<GAV,LAV>
+
+    private static Map<String, String> table; //<GAV,LAV>
+
+
+    public ExtractorXml()
+    {
+        table = new Hashtable<String, String>();
+    }
 
     //Use Hash map to save nbHeures for each teacher
-    HashMap<String , Integer> hmap = new HashMap<String ,Integer>();
+    Map<String , Integer> hmap = new HashMap<String ,Integer>();
 
-    Document document = null;
-    DocumentBuilderFactory factory = null;
-    DocumentBuilder builder = null;
+    private Document document = null;
+    private DocumentBuilderFactory factory = null;
+    private DocumentBuilder builder = null;
 
     private Req1 req1;
     private Req2 req2;
@@ -37,28 +44,21 @@ public class ExtractorXml {
     public void getRequest2FromMediator(Req2 req2){
         this.req2 = req2;
     }
-    public HashMap<String, Integer> sendResult1ToMediator() throws SQLException, IOException, SAXException, ParserConfigurationException {
-        return xml_request1();
+    public Map<String, Integer> sendResult1ToMediator() throws SQLException, IOException, SAXException, ParserConfigurationException {
+        return exec_xml_request1();
     }
 
     public int sendResult2ToMediator() throws SQLException, IOException, SAXException, ParserConfigurationException {
-        return xml_request2();
+        return exec_xml_request2();
     }
 
 
-    private HashMap<String, Integer> xml_request1() throws SQLException, ParserConfigurationException, SAXException, IOException {
-        TradRequest1();
-        try {
-            lire_XML("C:\\Users\\Hania\\OneDrive\\Beu\\projectMediateur\\Integration-de-donn-es\\src\\main\\resources\\Univ_BD_3.xml");
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-        NodeList enseignants = document.getElementsByTagName("Enseignant");
-        System.out.println("Request 1 answer from XML is : ");
+    private Map<String, Integer> exec_xml_request1() throws SQLException, ParserConfigurationException, SAXException, IOException {
+
+        table.put(req1.getEnseignant(),"Enseignant");
+        table.put(req1.getNbHeures(),"Nb_heures");
+
+        NodeList enseignants = document.getElementsByTagName(table.get(req1.getEnseignant()));
         Element E1, E2, E_1, E_2;
         NodeList enseig;
         NodeList Nb_heures;
@@ -70,52 +70,43 @@ public class ExtractorXml {
             E1 = (Element) enseignants.item(index);
             enseig = E1.getElementsByTagName("Nom"); // Enseignant_name
             E_1 = (Element) enseig.item(0);
-            System.out.println("Enseignant_name : " + E_1.getTextContent());
+
 
             //chercher dans chaque enseignant son NB_heures
             NodeList enseignements = E1.getElementsByTagName("Enseigne");
-            // System.out.println("enseignements.getLength()" + enseignements.getLength());
+
             for (int j = 0; j < enseignements.getLength(); j++) {
 
                 E2 = (Element) enseignements.item(j);
-                Nb_heures = E2.getElementsByTagName("Nb_heures"); // Nb_heures
+                Nb_heures = E2.getElementsByTagName(table.get(req1.getNbHeures())); // Nb_heures
                 E_2 = (Element) Nb_heures.item(0);
                 sum = sum + Integer.parseInt(E_2.getTextContent());
-                System.out.println("Numbre d'heures : " + E_2.getTextContent());
 
             }
             hmap.put(E_1.getTextContent(),sum);
-            System.out.println("La SUM total is ---------> " + sum);
+
         }
         return hmap;
     }
 
-    private int xml_request2() throws SQLException, ParserConfigurationException, SAXException, IOException {
-        TradRequest2();
-        try {
-            lire_XML("C:\\Users\\Hania\\OneDrive\\Beu\\projectMediateur\\Integration-de-donn-es\\src\\main\\resources\\Univ_BD_3.xml");
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
+    private int exec_xml_request2() throws SQLException, ParserConfigurationException, SAXException, IOException {
+
+        table.put(req2.getProvenance(),"Provenance");
+        table.put(req2.getEtudiant(),"Etudiant");
 
         Element E3, E_3;
         int sum2 = 0;
         NodeList L;
         //liste des etudiants
-        NodeList etudiants = document.getElementsByTagName("Etudiant");
-        System.out.println("the Provenance Xml file : ");
+        NodeList etudiants = document.getElementsByTagName(table.get(req2.getEtudiant()));
+
         for (int index = 0; index < etudiants.getLength(); index++) {
             // un etudiant
             E3 = (Element) etudiants.item(index);
-            L = E3.getElementsByTagName("Provenance");
+            L = E3.getElementsByTagName(table.get(req2.getProvenance()));
             E_3 = (Element) L.item(0); // un seul noeud NumEt
             String pays = E_3.getTextContent();
-            System.out.println(E_3.getTextContent());
-            // System.out.println("pays  "+pays);
+
             if (pays.equals("France")) {
                 sum2 += 1;
             }
@@ -124,32 +115,6 @@ public class ExtractorXml {
 
     }
 
-    /*public int sendResult1ToMediator() throws SQLException, IOException, SAXException, ParserConfigurationException {
-        return xml_request1();
-    }
-    public int sendResu2t1ToMediator() throws SQLException, IOException, SAXException, ParserConfigurationException {
-        return xml_request2();
-    }*/
-
-    //Translate the mediator Request
-    private void TradRequest1(){
-        try {
-            table1.put(req1.getEnseignant(),"enseignant");
-            table1.put(req1.getNbHeures(),"Heures");
-        }catch(NullPointerException e)
-        {
-            System.out.print("");
-        }
-    }
-    private void TradRequest2(){
-        try {
-            table2.put(req2.getProvenance(),"Provenance");
-            table2.put(req2.getEtudiant(),"etudiant");
-        }catch(NullPointerException e)
-        {
-            System.out.print("");
-        }
-    }
 
     // read XML File :
     public void lire_XML(String path_fichier) throws SAXException,
