@@ -47,6 +47,7 @@ public class ExtractorPostgre {
         refer.put(req2.getPays(),"fr");
         refer.put(req3.getTableCours(),"cours");
         refer.put(req3.getType(), "type");
+        refer.put(req3.getType_cours(), "type");
     }
 
     public int sendResult1ToMediator() throws SQLException {
