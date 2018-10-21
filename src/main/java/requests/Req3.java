@@ -2,17 +2,30 @@ package requests;
 
 public class Req3 {
 
-    private TypeCour typeCour;
+	private String tableCours;
+	private String type;
 
-    public Req3(TypeCour typeCour) {
-        this.typeCour = typeCour;
+    public Req3(String tableCours,String type) {
+    	this.type=type;
+        this.tableCours=tableCours;
     }
 
-    public TypeCour getTypeCour() {
-        return typeCour;
-    }
+	public String getTableCours() {
+		return tableCours;
+	}
 
-    public void setTypeCour(TypeCour typeCour) {
-        this.typeCour = typeCour;
-    }
+	public void setTableCours(String tableCours) {
+		this.tableCours = tableCours;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+    
+   
 }
